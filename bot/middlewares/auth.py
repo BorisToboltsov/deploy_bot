@@ -25,10 +25,15 @@ class Auth(BaseMiddleware):
         last_name = user.last_name
         username = user.username
 
-        TELEGRAM_IDS = json.loads(os.getenv("TELEGRAM_IDS"))
+        USER_SETTINGS = json.loads(os.getenv("USER_SETTINGS"))
+        PROJECT_SETTINGS = json.loads(os.getenv("PROJECT_SETTINGS"))
 
-        if str(telegram_id) not in TELEGRAM_IDS:
+        current_user_settings = USER_SETTINGS.get(str(telegram_id))
+        access_project_settings = [{project: PROJECT_SETTINGS.get(project)} for project in current_user_settings.get('project')]
+
+        if str(telegram_id) not in USER_SETTINGS:
             await access_denied(telegram_id)
         else:
-            # data["session"] = data
+            data["user_settings"] = current_user_settings
+            data["project_settings"] = access_project_settings
             return await handler(event, data)
