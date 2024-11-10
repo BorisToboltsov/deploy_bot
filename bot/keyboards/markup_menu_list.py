@@ -1,0 +1,3 @@
+MAIN_MENU_FOR_DEVELOPERS = [
+    "",
+]
