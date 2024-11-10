@@ -19,7 +19,7 @@ class Auth(BaseMiddleware):
         data: Dict[str, Any],
     ) -> Any:
 
-        user = data.get('event_from_user')
+        user = data.get("event_from_user")
         telegram_id = user.id
         first_name = user.first_name
         last_name = user.last_name
