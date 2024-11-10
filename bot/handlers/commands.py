@@ -9,5 +9,7 @@ router_commands = Router()
 
 
 @router_commands.message(Command("start"))
-async def commands_start(message: types.Message, user_settings: dict, project_settings) -> NoReturn:
+async def commands_start(
+    message: types.Message, user_settings: dict, project_settings
+) -> NoReturn:
     await change_project(message.from_user.id, user_settings.get("project"))
