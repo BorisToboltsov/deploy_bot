@@ -1,23 +1,26 @@
 import git
 
 
-class MyGit:
+class GitObject:
     def __init__(self, path):
-        self.repo = git.Repo(path, search_parent_directories=True)
-
-    def checkout(self, path: str):
         try:
-            self.repo.git.checkout(path)
+            self.repo = git.Repo(path, search_parent_directories=True)
+        except git.NoSuchPathError as e:
+            self.repo = None
+
+    async def checkout(self, branch_name: str):
+        try:
+            self.repo.git.checkout(branch_name)
         except git.exc.GitError as e:
             return e
 
-    def pull(self):
+    async def pull(self):
         try:
             self.repo.remote("origin").pull()
         except git.exc.GitError as e:
             return e
 
-    def reset(self):
+    async def reset(self):
         try:
             self.repo.git.reset("--hard")
         except git.exc.GitError as e:

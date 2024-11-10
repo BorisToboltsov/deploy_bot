@@ -29,10 +29,10 @@ class Auth(BaseMiddleware):
         PROJECT_SETTINGS = json.loads(os.getenv("PROJECT_SETTINGS"))
 
         current_user_settings = USER_SETTINGS.get(str(telegram_id))
-        access_project_settings = [
-            {project: PROJECT_SETTINGS.get(project)}
+        access_project_settings = {
+            project: PROJECT_SETTINGS.get(project)
             for project in current_user_settings.get("project")
-        ]
+        }
 
         if str(telegram_id) not in USER_SETTINGS:
             await access_denied(telegram_id)
