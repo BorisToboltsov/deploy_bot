@@ -20,6 +20,12 @@ class GitObject:
         except git.exc.GitError as e:
             return e
 
+    async def status(self):
+        try:
+            return self.repo.git.status()
+        except git.exc.GitError as e:
+            return e
+
     async def reset(self):
         try:
             self.repo.git.reset("--hard")
