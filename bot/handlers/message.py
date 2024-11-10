@@ -11,7 +11,7 @@ from bot.view.project import (
     project_settings_view,
     pull_view,
     reset_view,
-    set_checkout_view,
+    set_checkout_view, status_view,
 )
 from services.git_work import GitObject
 
@@ -92,3 +92,17 @@ async def choice_project_handler(
 ) -> NoReturn:
     await state.set_state(FSMProject.choice_project)
     await change_project(message.from_user.id, user_settings.get("project"))
+
+
+@router_message.message(F.text == "Status", FSMProject.set_project)
+async def status_handler(
+    message: Message, user_settings: dict, project_settings: dict, state: FSMContext
+) -> NoReturn:
+    data = await state.get_data()
+    git_object = data.get("git_object")
+    if git_object is None:
+        await state.set_state(FSMProject.choice_project)
+        await change_project(message.from_user.id, user_settings.get("project"))
+    else:
+        response = await git_object.status()
+        await status_view(message.from_user.id, response)

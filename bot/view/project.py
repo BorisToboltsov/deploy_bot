@@ -53,3 +53,8 @@ async def reset_view(telegram_id: int, response: GitCommandError | None) -> NoRe
     else:
         context = response.stderr
     await EntityMessage.send_message_from_user(telegram_id, context)
+
+
+async def status_view(telegram_id: int, response: str) -> NoReturn:
+    context = response.replace('<', '"').replace('>', '"')
+    await EntityMessage.send_message_from_user(telegram_id, context)
