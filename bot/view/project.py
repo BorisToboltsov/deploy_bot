@@ -15,7 +15,6 @@ async def project_settings_view(telegram_id: int) -> NoReturn:
 
 
 async def pull_view(telegram_id: int, response: GitCommandError) -> NoReturn:
-    print(response.stderr)
     if response is None:
         context = "Готово"
     else:
