@@ -6,7 +6,13 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.states.choice_project import FSMProject
 from bot.view.command_start import change_project
-from bot.view.project import project_settings_view, pull_view, checkout_view, set_checkout_view, reset_view
+from bot.view.project import (
+    checkout_view,
+    project_settings_view,
+    pull_view,
+    reset_view,
+    set_checkout_view,
+)
 from services.git_work import GitObject
 
 router_message = Router()
@@ -17,11 +23,9 @@ async def choice_project_handler(
     callback_query: CallbackQuery, project_settings: dict, state: FSMContext
 ) -> NoReturn:
     project = project_settings.get(callback_query.data)
-    git_object = GitObject(project.get('path'))
+    git_object = GitObject(project.get("path"))
     await state.set_state(FSMProject.set_project)
-    await state.update_data(
-        git_object=git_object
-    )
+    await state.update_data(git_object=git_object)
     await project_settings_view(callback_query.from_user.id)
 
 
@@ -30,7 +34,7 @@ async def pull_handler(
     message: Message, user_settings: dict, project_settings: dict, state: FSMContext
 ) -> NoReturn:
     data = await state.get_data()
-    git_object = data.get('git_object')
+    git_object = data.get("git_object")
     if git_object is None:
         await state.set_state(FSMProject.choice_project)
         await change_project(message.from_user.id, user_settings.get("project"))
@@ -44,7 +48,7 @@ async def checkout_handler(
     message: Message, user_settings: dict, project_settings: dict, state: FSMContext
 ) -> NoReturn:
     data = await state.get_data()
-    git_object = data.get('git_object')
+    git_object = data.get("git_object")
     if git_object is None:
         await state.set_state(FSMProject.choice_project)
         await change_project(message.from_user.id, user_settings.get("project"))
@@ -58,7 +62,7 @@ async def set_checkout_handler(
     message: Message, user_settings: dict, project_settings: dict, state: FSMContext
 ) -> NoReturn:
     data = await state.get_data()
-    git_object = data.get('git_object')
+    git_object = data.get("git_object")
     if git_object is None:
         await state.set_state(FSMProject.choice_project)
         await change_project(message.from_user.id, user_settings.get("project"))
@@ -73,7 +77,7 @@ async def checkout_handler(
     message: Message, user_settings: dict, project_settings: dict, state: FSMContext
 ) -> NoReturn:
     data = await state.get_data()
-    git_object = data.get('git_object')
+    git_object = data.get("git_object")
     if git_object is None:
         await state.set_state(FSMProject.choice_project)
         await change_project(message.from_user.id, user_settings.get("project"))
