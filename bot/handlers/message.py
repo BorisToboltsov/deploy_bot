@@ -40,7 +40,7 @@ async def pull_handler(
         await change_project(message.from_user.id, user_settings.get("project"))
     else:
         response = await git_object.pull()
-        await pull_view(message.from_user.id)
+        await pull_view(message.from_user.id, response)
 
 
 @router_message.message(F.text == "Checkout", FSMProject.set_project)
@@ -69,7 +69,7 @@ async def set_checkout_handler(
     else:
         response = await git_object.checkout(message.text)
         await state.set_state(FSMProject.set_project)
-        await set_checkout_view(message.from_user.id, response)
+        await set_checkout_view(message.from_user.id, response, message.text)
 
 
 @router_message.message(F.text == "Reset", FSMProject.set_project)
