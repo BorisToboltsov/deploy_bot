@@ -1,4 +1,3 @@
-from lib2to3.fixes.fix_input import context
 from typing import NoReturn
 
 from git.exc import GitCommandError
