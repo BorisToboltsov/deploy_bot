@@ -1,8 +1,7 @@
 from typing import NoReturn
 
-from aiogram import F, Router, types
+from aiogram import Router, types
 from aiogram.filters import Command
-from aiogram.fsm.context import FSMContext
 
 router_commands = Router()
 
