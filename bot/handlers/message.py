@@ -1,3 +1,5 @@
+import os
+from pprint import pprint
 from typing import NoReturn
 
 from aiogram import F, Router
@@ -6,6 +8,7 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.states.choice_project import FSMProject
 from bot.view.command_start import change_project
+from bot.view.openproject import work_packages_view
 from bot.view.project import (
     checkout_view,
     project_settings_view,
@@ -13,6 +16,7 @@ from bot.view.project import (
     reset_view,
     set_checkout_view, status_view,
 )
+from openproject.api.work_package import ApiWorkPackage
 from services.git_work import GitObject
 
 router_message = Router()
@@ -106,3 +110,20 @@ async def status_handler(
     else:
         response = await git_object.status()
         await status_view(message.from_user.id, response)
+
+
+@router_message.message(F.text == "Задачи", FSMProject.set_project)
+async def status_handler(
+    message: Message, user_settings: dict, project_settings: dict, state: FSMContext
+) -> NoReturn:
+    openproject_user_id = user_settings.get("openproject").get("id")
+    api_work_package = ApiWorkPackage()
+    response = await api_work_package.get_work_package_by_user(openproject_user_id)
+    work_packages = response.get('_embedded').get('elements')
+    message_view = ''
+    for i, work_package in enumerate(work_packages, 1):
+        id = work_package.get('id')
+        subject = work_package.get('subject')
+        link = f"{os.getenv("URL_WORK_PACKAGE")}{id}"
+        message_view += f'{i}: <a href="{link}">{subject}</a>\n'
+    await work_packages_view(message.from_user.id, message_view)
