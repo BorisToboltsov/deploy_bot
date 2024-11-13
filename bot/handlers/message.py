@@ -87,7 +87,7 @@ async def checkout_handler(
         await change_project(message.from_user.id, user_settings.get("project"))
     else:
         response = await git_object.reset()
-        await reset_view(message.from_user.id)
+        await reset_view(message.from_user.id, response)
 
 
 @router_message.message(F.text == "Выбрать проект")
