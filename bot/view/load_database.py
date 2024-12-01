@@ -32,7 +32,7 @@ async def load_database_error_view(telegram_id: int) -> NoReturn:
 
 
 async def load_database_stdout_view(telegram_id: int, t1, t2) -> NoReturn:
-    context = f"{t1}\n{t2}"
+    context = f"a\n{t1}\n{t2}"
     await EntityMessage.send_message_from_user(
         telegram_id, context
     )
