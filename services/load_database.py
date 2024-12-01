@@ -17,7 +17,7 @@ async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> No
     current_date = datetime.datetime.now().strftime('%Y-%m-%d')
     load = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} {db_name} < {os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql'
     # os.system(load)
-    subprocess.run(load)
+    subprocess.run(["mysql", "-u", "root", "-p", os.getenv("USER_BACKUP"), db_name, "<", f"{os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql"], stdout=subprocess.PIPE)
 
     await load_database_complete_view(telegram_id)
     await state.update_data(load_active=False)
