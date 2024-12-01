@@ -7,7 +7,7 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.states.choice_project import FSMProject
 from bot.view.command_start import change_project
-from bot.view.load_database import load_database_start_view, load_database_complete_view
+from bot.view.load_database import load_database_start_view, load_database_complete_view, load_database_active_view
 from bot.view.menu import git_menu_view
 from bot.view.openproject import work_packages_view
 from bot.view.project import (
@@ -152,7 +152,13 @@ async def load_database_handler(
     data = await state.get_data()
     current_project = data.get("current_project")
     db_name = current_project.get("db_name")
+    load_active = data.get("load_active")
 
-    await load_database_start_view(message.from_user.id)
-    await load_database(db_name)
-    await load_database_complete_view(message.from_user.id)
+    if load_active is None or load_active is False:
+        await state.update_data(load_active=True)
+        await load_database_start_view(message.from_user.id)
+        await load_database(db_name)
+        await load_database_complete_view(message.from_user.id)
+        await state.update_data(load_active=False)
+    else:
+        await load_database_active_view(message.from_user.id)
