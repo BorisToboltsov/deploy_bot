@@ -8,6 +8,7 @@ from aiogram.types import CallbackQuery, Message
 from bot.states.choice_project import FSMProject
 from bot.view.command_start import change_project
 from bot.view.load_database import load_database_start_view, load_database_complete_view
+from bot.view.menu import git_menu_view
 from bot.view.openproject import work_packages_view
 from bot.view.project import (
     checkout_view,
@@ -97,6 +98,20 @@ async def choice_project_handler(
 ) -> NoReturn:
     await state.set_state(FSMProject.choice_project)
     await change_project(message.from_user.id, user_settings.get("project"))
+
+
+@router_message.message(F.text == "Git")
+async def choice_project_handler(
+    message: Message, user_settings: dict, project_settings: dict, state: FSMContext
+) -> NoReturn:
+    await git_menu_view(message.from_user.id)
+
+
+@router_message.message(F.text == "Главное меню")
+async def choice_project_handler(
+    message: Message, user_settings: dict, project_settings: dict, state: FSMContext
+) -> NoReturn:
+    await project_settings_view(message.from_user.id)
 
 
 @router_message.message(F.text == "Status", FSMProject.set_project)
