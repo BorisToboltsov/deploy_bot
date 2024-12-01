@@ -20,7 +20,7 @@ async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> No
     t2 = subprocess.run(["mysql", "-u", os.getenv("USER_BACKUP"), f"-p{os.getenv("PASSWORD_BACKUP")}", db_name, "<", f"{os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql"], stdout=subprocess.PIPE)
 
     with open('example.txt') as f:
-        f.write(t1.stdout)
-        f.write(t2.stdout)
+        f.write(t1.stdout.decode('utf-8'))
+        f.write(t2.stdout.decode('utf-8'))
     await load_database_complete_view(telegram_id)
     await state.update_data(load_active=False)
