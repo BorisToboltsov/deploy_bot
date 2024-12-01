@@ -9,3 +9,10 @@ async def change_project(telegram_id: int, button_menu: list) -> NoReturn:
     await EntityMessage.send_message_from_user(
         telegram_id, context, await get_builder_inline_keyboard(button_menu, 2)
     )
+
+
+async def reset(telegram_id: int, button_menu: list) -> NoReturn:
+    context = "Состояние сброшено, выберите проект"
+    await EntityMessage.send_message_from_user(
+        telegram_id, context, await get_builder_inline_keyboard(button_menu, 2)
+    )
