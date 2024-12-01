@@ -160,7 +160,7 @@ async def load_database_handler(
     if load_active is None or load_active is False:
         await state.update_data(load_active=True)
         await load_database_start_view(message.from_user.id)
-        await asyncio.run(load_database(db_name, message.from_user.id))
+        asyncio.create_task(load_database(db_name, message.from_user.id))
         # await load_database_complete_view(message.from_user.id)
         # await state.update_data(load_active=False)
     else:
