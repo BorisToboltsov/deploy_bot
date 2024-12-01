@@ -8,6 +8,7 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.states.choice_project import FSMProject
 from bot.view.command_start import change_project
+from bot.view.load_database import load_database_start_view, load_database_complete_view
 from bot.view.openproject import work_packages_view
 from bot.view.project import (
     checkout_view,
@@ -138,9 +139,7 @@ async def load_database_handler(
     current_project = data.get("current_project")
     db_name = current_project.get("db_name")
 
-    # print(current_project)
-    # print(db_name)
-    # print(user_settings)
+    await load_database_start_view(message.from_user.id)
 
     import os
 
@@ -153,3 +152,5 @@ async def load_database_handler(
 
     test2 = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} {db_name} < {os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql'
     os.system(test2)
+
+    await load_database_complete_view(message.from_user.id)
