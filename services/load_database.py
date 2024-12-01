@@ -27,9 +27,22 @@ async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> No
     # t2 = subprocess.run(["mysql", "-u", os.getenv("USER_BACKUP"), f"-p{os.getenv("PASSWORD_BACKUP")}", db_name, "<", f"{os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql"], stdout=subprocess.PIPE)
     # await load_database_stdout_view(telegram_id, t2.stdout.decode('utf-8')[:2500])
     with open(f'{os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql', 'r') as file:
-        process = subprocess.run(
-        command,
+        # process = subprocess.run(
+        # command,
+        # stdin = file,
+        #         )
+
+        process = await asyncio.create_subprocess_exec(
+             *command,
+
         stdin = file,
-                )
+
+        stdout = asyncio.subprocess.PIPE,
+
+        stderr = asyncio.subprocess.PIPE
+                    )
+         # Ожидаем завершения процесса
+        stdout, stderr = await process.communicate()
+
     await load_database_complete_view(telegram_id)
     await state.update_data(load_active=False)
