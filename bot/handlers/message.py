@@ -147,5 +147,9 @@ async def load_database_handler(
     test = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} -Bse "RESET MASTER;"'
     os.system(test)
 
-    test2 = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} {db_name} < {os.getenv("PATH_TO_BACKUP")}/{db_name}\_$(date "+%Y-%m-%d").sql'
+    import datetime
+
+    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+    test2 = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} {db_name} < {os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql'
     os.system(test2)
