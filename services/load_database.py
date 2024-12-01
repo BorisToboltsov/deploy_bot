@@ -6,7 +6,7 @@ from typing import NoReturn
 from aiogram.fsm.context import FSMContext
 
 
-from bot.view.load_database import load_database_complete_view, load_database_stdout_view
+from bot.view.load_database import load_database_complete_view
 
 
 async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> NoReturn:
