@@ -19,6 +19,7 @@ from bot.view.project import (
 )
 from openproject.api.work_package import ApiWorkPackage
 from services.git_work import GitObject
+from services.load_database import load_database
 
 router_message = Router()
 
