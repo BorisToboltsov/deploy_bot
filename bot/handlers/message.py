@@ -1,5 +1,4 @@
 import os
-from pprint import pprint
 from typing import NoReturn
 
 from aiogram import F, Router
@@ -140,17 +139,5 @@ async def load_database_handler(
     db_name = current_project.get("db_name")
 
     await load_database_start_view(message.from_user.id)
-
-    import os
-
-    test = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} -Bse "RESET MASTER;"'
-    os.system(test)
-
-    import datetime
-
-    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
-
-    test2 = f'mysql -u {os.getenv("USER_BACKUP")} -p{os.getenv("PASSWORD_BACKUP")} {db_name} < {os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql'
-    os.system(test2)
-
+    await load_database(db_name)
     await load_database_complete_view(message.from_user.id)
