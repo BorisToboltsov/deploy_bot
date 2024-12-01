@@ -1,3 +1,4 @@
+import asyncio
 import os
 from typing import NoReturn
 
@@ -159,8 +160,9 @@ async def load_database_handler(
     if load_active is None or load_active is False:
         await state.update_data(load_active=True)
         await load_database_start_view(message.from_user.id)
-        await load_database(db_name)
-        await load_database_complete_view(message.from_user.id)
-        await state.update_data(load_active=False)
+        asyncio.gather(load_database(db_name))
+        asyncio.run(load_database(db_name))
+        # await load_database_complete_view(message.from_user.id)
+        # await state.update_data(load_active=False)
     else:
         await load_database_active_view(message.from_user.id)
