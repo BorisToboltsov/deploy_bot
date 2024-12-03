@@ -14,7 +14,7 @@ async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> No
 
     current_date = datetime.datetime.now().strftime('%Y-%m-%d')
     command = ['mysql', '-u', os.getenv("USER_BACKUP"), '-p' + os.getenv("PASSWORD_BACKUP"), db_name]
-    with open(f'{os.getenv("PATH_TO_BACKUP")}/{db_name}_{current_date}.sql', 'r') as file:
+    with open(f'{os.getenv("PATH_TO_BACKUP")}/cn67581_goldtime_{current_date}.sql', 'r') as file:
         process = await asyncio.create_subprocess_exec(
             *command,
             stdin = file,
