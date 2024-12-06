@@ -6,7 +6,7 @@ from typing import NoReturn
 from aiogram.fsm.context import FSMContext
 
 
-from bot.view.load_database import load_database_complete_view, load_database_file_not_found_view
+from bot.view.load_database import load_database_complete_view
 
 
 async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> NoReturn:
@@ -14,17 +14,13 @@ async def load_database(db_name: str, telegram_id: int, state: FSMContext) -> No
 
     current_date = datetime.datetime.now().strftime('%Y-%m-%d')
     command = ['mysql', '-u', os.getenv("USER_BACKUP"), '-p' + os.getenv("PASSWORD_BACKUP"), db_name]
-    try:
-        with open(f'{os.getenv("PATH_TO_BACKUP")}/cn67581_goldtime_{current_date}.sql', 'r') as file:
-            process = await asyncio.create_subprocess_exec(
-                *command,
-                stdin = file,
-                stdout = asyncio.subprocess.PIPE,
-                stderr = asyncio.subprocess.PIPE)
-            stdout, stderr = await process.communicate()
+    with open(f'{os.getenv("PATH_TO_BACKUP")}/cn67581_goldtime_{current_date}.sql', 'r') as file:
+        process = await asyncio.create_subprocess_exec(
+            *command,
+            stdin = file,
+            stdout = asyncio.subprocess.PIPE,
+            stderr = asyncio.subprocess.PIPE)
+        stdout, stderr = await process.communicate()
 
-        await load_database_complete_view(telegram_id)
-        await state.update_data(load_active=False)
-    except FileNotFoundError:
-        await load_database_file_not_found_view(telegram_id)
-        await state.update_data(load_active=False)
+    await load_database_complete_view(telegram_id)
+    await state.update_data(load_active=False)
