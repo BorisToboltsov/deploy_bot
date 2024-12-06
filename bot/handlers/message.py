@@ -8,7 +8,7 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.states.choice_project import FSMProject
 from bot.view.command_start import change_project
-from bot.view.load_database import load_database_start_view, load_database_complete_view, load_database_active_view
+from bot.view.load_database import load_database_start_view, load_database_active_view, load_database_file_not_found_view
 from bot.view.menu import git_menu_view
 from bot.view.openproject import work_packages_view
 from bot.view.project import (
@@ -160,6 +160,10 @@ async def load_database_handler(
     if load_active is None or load_active is False:
         await state.update_data(load_active=True)
         await load_database_start_view(message.from_user.id)
-        asyncio.create_task(load_database(db_name, message.from_user.id, state))
+        try:
+            asyncio.create_task(load_database(db_name, message.from_user.id, state))
+        except FileNotFoundError:
+            await load_database_file_not_found_view(telegram_id)
+            await state.update_data(load_active=False)
     else:
         await load_database_active_view(message.from_user.id)
