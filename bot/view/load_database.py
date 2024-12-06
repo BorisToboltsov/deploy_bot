@@ -16,6 +16,12 @@ async def load_database_complete_view(telegram_id: int) -> NoReturn:
         telegram_id, context
     )
 
+async def load_database_file_not_found_view(telegram_id: int) -> NoReturn:
+    context = "Файл бэкапа не найден."
+    await EntityMessage.send_message_from_user(
+        telegram_id, context
+    )
+
 
 async def load_database_active_view(telegram_id: int) -> NoReturn:
     context = "База данных загружается, подождите."
