@@ -160,10 +160,6 @@ async def load_database_handler(
     if load_active is None or load_active is False:
         await state.update_data(load_active=True)
         await load_database_start_view(message.from_user.id)
-        try:
-            asyncio.create_task(load_database(db_name, message.from_user.id, state))
-        except FileNotFoundError:
-            await load_database_file_not_found_view(telegram_id)
-            await state.update_data(load_active=False)
+        asyncio.create_task(load_database(db_name, message.from_user.id, state))
     else:
         await load_database_active_view(message.from_user.id)
